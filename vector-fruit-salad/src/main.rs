@@ -7,7 +7,22 @@ useful data structures in Rust. A vector is represented using the Vec<T> type.
 use rand::seq::SliceRandom; // rand is a random number generation library in Rust
 use rand::thread_rng;
 
+use clap::Parser;
+
+#[derive(Parser)]
+#[clap(
+    version = "1.0",
+    author = "Bolatan Ibrahim <ehbraheem@gmail.com>",
+    about = "Number of fruits to include in the salad"
+)]
+
+struct Opts {
+    #[clap(short, long)]
+    fruits: Vec<String>,
+}
+
 fn main() {
+    let opts = Opts::parse();
     let mut fruit = vec![
         "Orange",
         "Fig",
@@ -17,6 +32,15 @@ fn main() {
         "Pear",
         "Peach",
     ];
+
+    // Add the fruits provided by the user to the fruit salad
+    let user_fruits: Vec<String> = opts.fruits;
+
+    if !user_fruits.is_empty() {
+        user_fruits.iter().for_each(|f| {
+            fruit.push(f);
+        });
+    }
 
     // Scramble (shuffle) the fruit
     let mut rng = thread_rng();
